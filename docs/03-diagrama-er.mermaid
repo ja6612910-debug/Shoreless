@@ -1,0 +1,124 @@
+erDiagram
+    usuarios ||--o{ tokens_usuario : "tiene"
+    usuarios ||--o{ suscripciones_push : "registra"
+    usuarios ||--o{ proyectos : "crea"
+    usuarios ||--o{ trabajos_conversion : "solicita"
+    usuarios ||--o{ exportaciones : "realiza"
+    usuarios ||--o{ enlaces_compartidos : "crea"
+    proyectos ||--o{ imagenes : "contiene"
+    proyectos ||--o{ modelos_3d : "agrupa"
+    imagenes ||--o{ trabajos_conversion : "origina"
+    metodos_conversion ||--o{ trabajos_conversion : "define"
+    trabajos_conversion ||--o| modelos_3d : "produce"
+    modelos_3d ||--o{ exportaciones : "genera"
+    modelos_3d ||--o{ enlaces_compartidos : "se comparte con"
+
+    usuarios {
+        BIGINT id PK
+        VARCHAR nombre
+        VARCHAR email UK
+        VARCHAR password_hash
+        ENUM rol
+        VARCHAR avatar_clave
+        TINYINT activo
+        DATETIME creado_en
+        DATETIME actualizado_en
+    }
+    tokens_usuario {
+        BIGINT id PK
+        BIGINT usuario_id FK
+        ENUM tipo
+        CHAR token_hash UK
+        DATETIME expira_en
+        DATETIME usado_en
+        DATETIME revocado_en
+        DATETIME creado_en
+    }
+    suscripciones_push {
+        BIGINT id PK
+        BIGINT usuario_id FK
+        CHAR endpoint_hash UK
+        TEXT endpoint
+        VARCHAR p256dh
+        VARCHAR auth
+        DATETIME creado_en
+    }
+    proyectos {
+        BIGINT id PK
+        BIGINT usuario_id FK
+        VARCHAR nombre
+        TEXT descripcion
+        ENUM estado
+        DATETIME eliminado_en
+        DATETIME creado_en
+        DATETIME actualizado_en
+    }
+    imagenes {
+        BIGINT id PK
+        BIGINT proyecto_id FK
+        VARCHAR nombre_original
+        VARCHAR clave_almacenamiento
+        VARCHAR mime_type
+        INT tamano_bytes
+        SMALLINT ancho_px
+        SMALLINT alto_px
+        CHAR hash_sha256
+        DATETIME creado_en
+    }
+    metodos_conversion {
+        TINYINT id PK
+        VARCHAR codigo UK
+        VARCHAR nombre
+        VARCHAR descripcion
+        TINYINT requiere_ia
+        TINYINT activo
+        JSON parametros_por_defecto
+    }
+    trabajos_conversion {
+        BIGINT id PK
+        BIGINT imagen_id FK
+        TINYINT metodo_id FK
+        BIGINT usuario_id FK
+        ENUM estado
+        TINYINT progreso
+        JSON parametros
+        VARCHAR proveedor
+        VARCHAR id_externo
+        VARCHAR mensaje_error
+        TINYINT intentos
+        DATETIME creado_en
+        DATETIME iniciado_en
+        DATETIME finalizado_en
+    }
+    modelos_3d {
+        BIGINT id PK
+        BIGINT proyecto_id FK
+        BIGINT trabajo_id FK, UK
+        VARCHAR nombre
+        SMALLINT version
+        TINYINT es_principal
+        VARCHAR clave_glb
+        VARCHAR clave_miniatura
+        INT tamano_bytes
+        INT num_vertices
+        INT num_caras
+        DATETIME eliminado_en
+        DATETIME creado_en
+    }
+    exportaciones {
+        BIGINT id PK
+        BIGINT modelo_id FK
+        BIGINT usuario_id FK
+        ENUM formato
+        DATETIME creado_en
+    }
+    enlaces_compartidos {
+        BIGINT id PK
+        BIGINT modelo_id FK
+        BIGINT creado_por FK
+        CHAR token UK
+        DATETIME expira_en
+        DATETIME revocado_en
+        INT visitas
+        DATETIME creado_en
+    }

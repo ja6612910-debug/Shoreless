@@ -70,6 +70,12 @@ web_modules/
 .env.*
 !.env.example
 
+# Imágenes y modelos guardados en disco local
+backed-Shoreless/storage/
+
+# Imágenes y modelos subidos por la API
+backed-Shoreless/storage/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
