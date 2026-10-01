@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api as solicitarApi, guardarSesion, leerSesion } from './api'
+import { api as solicitarApi, base as API, guardarSesion, leerSesion } from './api'
 
-export const API = import.meta.env.VITE_API_URL || ''
+export { API }
 const Contexto = createContext(null)
 
 export function SesionProvider({ children }) {

@@ -1,4 +1,4 @@
-const base = import.meta.env.VITE_API_URL || ''
+export const base = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '' : 'https://shoreless.vercel.app')
 const CLAVE = 'alzado-sesion'
 
 export function leerSesion() {
